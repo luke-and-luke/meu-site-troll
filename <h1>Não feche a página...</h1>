@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sistema...</title>
+<style>
+body{
+background:black;
+color:lime;
+font-family:monospace;
+text-align:center;
+margin-top:80px;
+overflow:hidden;
+}
+#bar{
+width:80%;
+height:30px;
+border:2px solid lime;
+margin:auto;
+}
+#progress{
+height:100%;
+width:0%;
+background:lime;
+}
+button{
+margin-top:20px;
+padding:10px;
+background:lime;
+border:none;
+cursor:pointer;
+}
+#msg{
+margin-top:20px;
+font-size:14px;
+}
+.glitch{
+position:absolute;
+color:red;
+font-size:20px;
+animation:flash 0.2s infinite;
+}
+@keyframes flash{
+0%{opacity:0;}
+50%{opacity:1;}
+100%{opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<h1>Inicializando sistema...</h1>
+
+<div id="bar">
+<div id="progress"></div>
+</div>
+
+<p id="text">0%</p>
+<div id="msg">Carregando arquivos...</div>
+
+<button onclick="reset()">Tentar novamente</button>
+
+<audio id="sound" loop>
+<source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+</audio>
+
+<script>
+let progress=0;
+let bar=document.getElementById("progress");
+let text=document.getElementById("text");
+let msg=document.getElementById("msg");
+let sound=document.getElementById("sound");
+
+let messages=[
+"Iniciando núcleo...",
+"Verificando sistema...",
+"Baixando dados...",
+"Erro inesperado...",
+"Tentando corrigir...",
+"Reiniciando módulos...",
+"Acessando servidor...",
+"Falha detectada...",
+"Corrigindo falha...",
+"Carregando..."
+];
+
+document.body.onclick=()=>sound.play();
+
+function randomMsg(){
+msg.innerText=messages[Math.floor(Math.random()*messages.length)];
+}
+
+function glitch(){
+let g=document.createElement("div");
+g.className="glitch";
+g.innerText="ERRO";
+g.style.top=Math.random()*100+"%";
+g.style.left=Math.random()*100+"%";
+document.body.appendChild(g);
+setTimeout(()=>g.remove(),500);
+}
+
+function load(){
+progress+=Math.random()*5;
+
+if(progress>=99 && Math.random()<0.7){
+progress=99;
+}else if(progress>=100){
+progress=0;
+}
+
+bar.style.width=progress+"%";
+text.innerText=Math.floor(progress)+"%";
+
+if(Math.random()<0.2){
+randomMsg();
+}
+
+if(Math.random()<0.1){
+glitch();
+}
+
+setTimeout(load,80);
+}
+
+function reset(){
+progress=0;
+msg.innerText="Reiniciando sistema...";
+setTimeout(()=>{
+msg.innerText="Falha ao reiniciar...";
+},2000);
+}
+
+setInterval(()=>{
+if(Math.random()<0.3){
+document.body.style.background="darkred";
+setTimeout(()=>document.body.style.background="black",200);
+}
+},3000);
+
+load();
+</script>
+
+</body>
+</html>
